@@ -13,3 +13,6 @@ env/
 # Generated reports
 output/*
 !output/.gitkeep
+
+# VS Code local settings
+.vscode/
