@@ -1,5 +1,12 @@
 import pandas as pd
-df = pd.read_excel("data/sales_data.xlsx")
+from pathlib import Path
+data_dir = Path("data")
+excel_files = list(data_dir.glob("*.xlsx"))
+dataframes = []
+for file in excel_files:
+    df = pd.read_excel(file)
+    dataframes.append(df)
+df = pd.concat(dataframes, ignore_index=True)
 df["売上金額"] = df["数量"] * df["単価"]
 abnormal_data = df[(df["数量"]<=0) | (df["単価"]<=0)]
 normal_data = df[(df["数量"]>0) & (df["単価"]>0)]
