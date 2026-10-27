@@ -16,3 +16,6 @@ output/*
 
 # VS Code local settings
 .vscode/
+
+# Excel temporary files
+~$*
