@@ -1,10 +1,30 @@
 import pandas as pd
 from pathlib import Path
 data_dir = Path("data")
-excel_files = list(data_dir.glob("*.xlsx"))
+excel_files = [
+    file for file in data_dir.glob("*.xlsx")
+    if not file.name.startswith("~$")
+]
+if not excel_files:
+    print("Excelファイルが見つかりません。")
+    raise SystemExit
+required_columns = ["商品名", "数量", "単価"]
 dataframes = []
 for file in excel_files:
     df = pd.read_excel(file)
+    actual_columns=df.columns
+    missing_columns=[]
+    for column in required_columns:
+        if column not in actual_columns:
+            missing_columns.append(column)
+    if missing_columns:
+        print("ファイル名：", file.name)
+        print("必須列が不足しています。")
+        for column in missing_columns:
+            print("不足している列: ", column)
+        raise SystemExit
+    else:
+        print("必須列はすべて揃っています。")
     dataframes.append(df)
 df = pd.concat(dataframes, ignore_index=True)
 df["売上金額"] = df["数量"] * df["単価"]
